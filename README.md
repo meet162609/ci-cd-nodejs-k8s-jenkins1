@@ -280,7 +280,7 @@ Use the following pipeline script:
 ```groovy
 pipeline {
   environment {
-    dockerimagename = "yourdockerhub/nodeapp"
+    dockerimagename = "meet162609/nodeapp"
     dockerImage = ""
   }
 
@@ -290,14 +290,14 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        git 'https://github.com/your/repo.git'
+        git branch: 'main', url: 'https://github.com/meet162609/ci-cd-nodejs-k8s-jenkins1.git'
       }
     }
 
     stage('Build Docker Image') {
       steps {
         script {
-          dockerImage = docker.build(dockerimagename)
+          dockerImage = docker.build(dockerimagename, './node-master')
         }
       }
     }
@@ -318,7 +318,7 @@ pipeline {
     stage('Deploy to Kubernetes') {
       steps {
         script {
-          kubernetesDeploy(configs: "deploymentservice.yml", kubeconfigId: "kubernetes")
+          kubernetesDeploy(configs: "node-master/deploymentservice.yml", kubeconfigId: "kubernetes")
         }
       }
     }
